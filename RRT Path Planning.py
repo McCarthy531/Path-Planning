@@ -29,5 +29,5 @@ cv.destroyAllWindows()
 
 #Path planning
 pt_start = 1
-pt_end = 1
+pt_end = 1fgh
 pt_current = 1
