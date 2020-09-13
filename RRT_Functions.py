@@ -1,32 +1,3 @@
-def LineGen(pt1,pt2):
-    line = []
-    if pt1[0] == pt2[0]:
-        if pt1[1] < pt2[1]: inc = 1
-        else: inc = -1
-        for i in range(pt1[1],pt2[1],inc):
-            line.append((pt1[0],i))
-    elif pt1[1] == pt2[1]:
-        if pt1[0] < pt2[0]: inc = 1
-        else: inc = -1
-        for i in range(pt1[1],pt2[1],inc):
-            line.append((i,pt1[1]))    
-    elif abs(pt1[1]-pt2[1]) <= abs(pt1[0]-pt2[0]): #y = mx + b
-        m = (pt1[1]-pt2[1])/(pt1[0]-pt2[0])
-        b = pt1[1]-pt1[0]*m
-        if pt1[0] < pt2[0]: inc = 1
-        else: inc = -1
-        for i in range(pt1[0],pt2[0],inc):
-            line.append((i,round(m*i+b)))
-    elif abs(pt1[1]-pt2[1]) > abs(pt1[0]-pt2[0]): #x = my + b
-        m = (pt1[0]-pt2[0])/(pt1[1]-pt2[1])
-        b = pt1[0]-pt1[1]*m
-        if pt1[1] < pt2[1]: inc = 1
-        else: inc = -1
-        for i in range(pt1[1],pt2[1],inc):
-            line.append((round(m*i+b),i))
-    line.append(pt2)
-    return line
-
 def DistCheck(points, pt_random):
     dist = []
     for point in points:
@@ -34,9 +5,41 @@ def DistCheck(points, pt_random):
     short_dist = dist.index(min(dist))
     return short_dist
 
-def NoGoCheck(line, img, img2):
+def LineGen(pt1,pt2):
+    h_start = pt1[0]
+    h_end = pt2[0]
+    w_start = pt1[1]
+    w_end = pt2[1]
+    line = []
+    if h_start == h_end:
+        if w_start < w_end: inc = 1
+        else: inc = -1
+        for i in range(w_start,w_end,inc):
+            line.append((h_start,i))
+    elif w_start == w_end:
+        if h_start < h_end: inc = 1
+        else: inc = -1
+        for i in range(h_start,h_end,inc):
+            line.append((i,w_start))    
+    elif abs(w_start-w_end) <= abs(h_start-h_end): 
+        m = (w_start-w_end)/(h_start-h_end)
+        b = w_start-(m*h_start)
+        if h_start < h_end: inc = 1
+        else: inc = -1
+        for i in range(h_start,h_end,inc):
+            line.append((i,round(m*i+b)))
+    elif abs(w_start-w_end) > abs(h_start-h_end): 
+        m = (h_start-h_end)/(w_start-w_end)
+        b = h_start-(m*w_start)
+        if w_start < w_end: inc = 1
+        else: inc = -1
+        for i in range(w_start,w_end,inc):
+            line.append((round((m*i+b)),i))
+    line.append(pt2)
+    return line
+
+def NoGoCheck(line, img):
     for point in line:
-        print(point, "=", img[point[0]][point[1]], " : ", img2[point[0]][point[1]])
-        if img[point[0]][point[1]] == 0:
+        if img[(point[0],point[1])] == 0:
             return False
     return True
